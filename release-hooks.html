@@ -1,0 +1,490 @@
+        
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+<head><base href="/">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            
+                                
+    
+    <link rel="stylesheet" href="assets/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="assets/css/highlightjs.css" type="text/css" />
+    <link rel="stylesheet" href="assets/css/badge_only.css" type="text/css" />
+
+</head>
+
+<body class="wy-body-for-nav">
+ <div class="wy-grid-for-nav">
+
+        <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
+                
+                                                                                                    
+                                                                                                                                                                        </div>
+
+            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                                                                                                                                                                                                                                                                                                                            </div>
+        </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+                                                        
+
+        <div class="wy-nav-content">                <div class="rst-content">
+                                        <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">                            <div itemprop="articleBody">
+                                    <div class="section">
+<h1 id="release-hooks">
+    Release Hooks
+    <a class="headerlink" href="#release-hooks" title="Permalink to this headline">¶</a>
+</h1>
+<p>The <a href="commands/release.html" class="reference internal">release</a> command makes a new release for the current branch.</p>
+<p>By itself this command already takes care of a number of requirements.</p>
+<p>But sometimes you need to perform a special operation before and/or after the release process.
+This might vary from updating the <code translate="no" class="notranslate">composer.json</code> branch-alias, to creating a pull request for
+the new release.</p>
+<p>Now, instead of doing this manually, HuPKit allows you to hook-into the release process,
+executing a custom callback before and/or after a new release is created.</p>
+<p>## The Script</p>
+<p>Add a PHP  script named either <code translate="no" class="notranslate">pre-release.php</code> or <code translate="no" class="notranslate">post-release.php</code> at the root folder
+of the <code translate="no" class="notranslate">_hubkit</code> <a href="config.html#repository-configuration" class="reference internal">configuration branch</a>.</p>
+<p>With the following contents:</p>
+<div translate="no" class="highlight-php notranslate">
+    <table class="highlighttable">
+        <tbody>
+            <tr>
+                <td class="linenos">
+                    <div class="linenodiv">
+                        <pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23</pre>
+                    </div>
+                </td>
+                <td class="code">
+                    <div class="highlight">
+                        <pre class="hljs php"><span class="hljs-meta">&lt;?php</span>
+
+<span class="hljs-keyword">declare</span>(strict_types=<span class="hljs-number">1</span>);
+
+<span class="hljs-keyword">use</span> <span class="hljs-title">Psr</span>\<span class="hljs-title">Container</span>\<span class="hljs-title">ContainerInterface</span> <span class="hljs-title">as</span> <span class="hljs-title">Container</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">Rollerworks</span>\<span class="hljs-title">Component</span>\<span class="hljs-title">Version</span>\<span class="hljs-title">Version</span>;
+
+<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(Container <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>container</span>, Version <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>version</span>, string <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>branch</span>, ?string <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>releaseTitle</span>, string <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>changelog</span>)</span> </span>{
+    <span class="hljs-comment">// Place the hooks logic here.</span>
+
+    <span class="hljs-comment">// The $container provides access to the HuPKit application Service Container</span>
+    <span class="hljs-comment">// with among following services: github, git (git.config, git.branch), process, filesystem, style, editor, logger.</span>
+    <span class="hljs-comment">//</span>
+    <span class="hljs-comment">// See \HubKit\Container for all services and there corresponding classes.</span>
+    <span class="hljs-comment">// <span class="hljs-doctag">Note:</span> Only the services listed above are covered by the BC promise.</span>
+
+    <span class="hljs-comment">// !! CAUTION !!</span>
+    <span class="hljs-comment">//</span>
+    <span class="hljs-comment">// Hooks are loaded from a temporary location *outside of the repository*, use the `__DIR__`</span>
+    <span class="hljs-comment">// constant to load files related to the script, use `$container['current_dir']`</span>
+    <span class="hljs-comment">// to get the actual location to the project repository.</span>
+    <span class="hljs-comment">//</span>
+};</pre>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="admonition admonition-caution ">
+    <p class="admonition-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <span>Caution</span>
+    </p><p>The hook is executed in the HuPKit application's context, you have
+full access to entire applications flow, anything that crashes
+the application cannot be resolved.</p>
+</div>
+<p>While possible, it's' best not to load external dependencies as there is
+currently no promise this will work when HuPKit uses similar dependencies.
+In this case it might be better to use the <code translate="no" class="notranslate">process</code> service to execute
+a separate command.</p>
+<div class="admonition admonition-tip ">
+    <p class="admonition-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+                <span>Tip</span>
+    </p><p>HuPKit v2.0 will contain a complete plug-in architecture with
+more flexibility and dependency handling.</p>
+</div>
+<div class="section">
+<h2 id="examples">
+    Examples
+    <a class="headerlink" href="#examples" title="Permalink to this headline">¶</a>
+</h2>
+<p>Below you can find some examples how to use these hooks.</p>
+<div class="section">
+<h3 id="updating-the-composer-json-branch-alias-pre-release">
+    Updating the `composer.json` branch-alias (pre-release)
+    <a class="headerlink" href="#updating-the-composer-json-branch-alias-pre-release" title="Permalink to this headline">¶</a>
+</h3>
+<div translate="no" class="highlight-php notranslate">
+    <table class="highlighttable">
+        <tbody>
+            <tr>
+                <td class="linenos">
+                    <div class="linenodiv">
+                        <pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26</pre>
+                    </div>
+                </td>
+                <td class="code">
+                    <div class="highlight">
+                        <pre class="hljs php"><span class="hljs-meta">&lt;?php</span>
+
+<span class="hljs-keyword">declare</span>(strict_types=<span class="hljs-number">1</span>);
+
+<span class="hljs-comment">// pre-release.php (in the _hubkit branch)</span>
+
+<span class="hljs-keyword">use</span> <span class="hljs-title">Psr</span>\<span class="hljs-title">Container</span>\<span class="hljs-title">ContainerInterface</span> <span class="hljs-title">as</span> <span class="hljs-title">Container</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">Rollerworks</span>\<span class="hljs-title">Component</span>\<span class="hljs-title">Version</span>\<span class="hljs-title">Version</span>;
+
+<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(Container <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>container</span>, Version <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>version</span>, string <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>branch</span>, ?string <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>releaseTitle</span>, string <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>changelog</span>)</span> </span>{
+
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>container</span><span class="hljs-operator">-&gt;</span>get(<span class="hljs-string">'logger'</span>)<span class="hljs-operator">-&gt;</span>info(<span class="hljs-string">'Updating composer branch-alias'</span>);
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>container</span><span class="hljs-operator">-&gt;</span>get(<span class="hljs-string">'process'</span>)<span class="hljs-operator">-&gt;</span>mustRun([<span class="hljs-string">'composer'</span>, <span class="hljs-string">'config'</span>, <span class="hljs-string">'extra.branch-alias.dev-'</span>.<span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>branch</span>, sprintf(<span class="hljs-string">'%d.%d-dev'</span>, <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>version</span><span class="hljs-operator">-&gt;</span>major, <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>version</span><span class="hljs-operator">-&gt;</span>minor)]);
+
+    <span class="hljs-comment">// Caution: Make sure to commit the changes. HuPKit will refuse to continue if there are dangling changes.</span>
+
+    <span class="hljs-comment">/** <span class="hljs-doctag">@var</span> \HubKit\Service\Git\GitBranch $gitBranch */</span>
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>gitBranch</span> = <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>container</span><span class="hljs-operator">-&gt;</span>get(<span class="hljs-string">'git.branch'</span>);
+
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>gitBranch</span><span class="hljs-operator">-&gt;</span>add(<span class="hljs-string">'composer.json'</span>);
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>gitBranch</span><span class="hljs-operator">-&gt;</span>commit(<span class="hljs-string">'Update composer branch-alias'</span>);
+
+    <span class="hljs-comment">/** <span class="hljs-doctag">@var</span> \HubKit\Service\Git $git */</span>
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>git</span> = <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>container</span><span class="hljs-operator">-&gt;</span>get(<span class="hljs-string">'git'</span>);
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>git</span><span class="hljs-operator">-&gt;</span>pushToRemote(<span class="hljs-string">'upstream'</span>, <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>branch</span>);
+};</pre>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</div>
+<div class="section">
+<h3 id="updating-the-composer-json-branch-alias-post-release">
+    Updating the `composer.json` branch-alias (post-release)
+    <a class="headerlink" href="#updating-the-composer-json-branch-alias-post-release" title="Permalink to this headline">¶</a>
+</h3>
+<div translate="no" class="highlight-php notranslate">
+    <table class="highlighttable">
+        <tbody>
+            <tr>
+                <td class="linenos">
+                    <div class="linenodiv">
+                        <pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30</pre>
+                    </div>
+                </td>
+                <td class="code">
+                    <div class="highlight">
+                        <pre class="hljs php"><span class="hljs-meta">&lt;?php</span>
+
+<span class="hljs-keyword">declare</span>(strict_types=<span class="hljs-number">1</span>);
+
+<span class="hljs-comment">// post-release.php (in the _hubkit branch)</span>
+
+<span class="hljs-keyword">use</span> <span class="hljs-title">Psr</span>\<span class="hljs-title">Container</span>\<span class="hljs-title">ContainerInterface</span> <span class="hljs-title">as</span> <span class="hljs-title">Container</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">Rollerworks</span>\<span class="hljs-title">Component</span>\<span class="hljs-title">Version</span>\<span class="hljs-title">Version</span>;
+
+<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(Container <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>container</span>, Version <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>version</span>, string <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>branch</span>, ?string <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>releaseTitle</span>, string <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>changelog</span>)</span> </span>{
+
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>container</span><span class="hljs-operator">-&gt;</span>get(<span class="hljs-string">'logger'</span>)<span class="hljs-operator">-&gt;</span>info(<span class="hljs-string">'Updating composer branch-alias'</span>);
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>container</span><span class="hljs-operator">-&gt;</span>get(<span class="hljs-string">'process'</span>)<span class="hljs-operator">-&gt;</span>mustRun([<span class="hljs-string">'composer'</span>, <span class="hljs-string">'config'</span>, <span class="hljs-string">'extra.branch-alias.dev-'</span>.<span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>branch</span>, sprintf(<span class="hljs-string">'%d.%d-dev'</span>, <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>version</span><span class="hljs-operator">-&gt;</span>major, <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>version</span><span class="hljs-operator">-&gt;</span>minor)]);
+
+    <span class="hljs-comment">// Caution: Make sure to commit the changes. HubKit will refuse to continue if there are dangling changes.</span>
+
+    <span class="hljs-comment">/** <span class="hljs-doctag">@var</span> \HubKit\Service\Git\GitBranch $gitBranch */</span>
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>gitBranch</span> = <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>container</span><span class="hljs-operator">-&gt;</span>get(<span class="hljs-string">'git.branch'</span>);
+
+    <span class="hljs-keyword">if</span> (<span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>gitBranch</span><span class="hljs-operator">-&gt;</span>isWorkingTreeReady()) {
+        <span class="hljs-keyword">return</span>; <span class="hljs-comment">// Nothing to commit, composer is already up-to-date</span>
+    }
+
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>gitBranch</span><span class="hljs-operator">-&gt;</span>add(<span class="hljs-string">'composer.json'</span>);
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>gitBranch</span><span class="hljs-operator">-&gt;</span>commit(<span class="hljs-string">'Update composer branch-alias'</span>);
+
+    <span class="hljs-comment">/** <span class="hljs-doctag">@var</span> \HubKit\Service\Git $git */</span>
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>git</span> = <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>container</span><span class="hljs-operator">-&gt;</span>get(<span class="hljs-string">'git'</span>);
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>git</span><span class="hljs-operator">-&gt;</span>pushToRemote(<span class="hljs-string">'upstream'</span>, <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>branch</span>);
+};</pre>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</div>
+<div class="section">
+<h3 id="creating-a-pull-request-for-the-release-pre-release">
+    ### Creating a pull request for the release (pre-release)
+    <a class="headerlink" href="#creating-a-pull-request-for-the-release-pre-release" title="Permalink to this headline">¶</a>
+</h3>
+<div class="admonition admonition-important ">
+    <p class="admonition-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                <span>Important</span>
+    </p><p>This technique is not to be used as-is, understand the risk and be
+sure to apply enough error protections.</p>
+</div>
+<div translate="no" class="highlight-php notranslate">
+    <table class="highlighttable">
+        <tbody>
+            <tr>
+                <td class="linenos">
+                    <div class="linenodiv">
+                        <pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68</pre>
+                    </div>
+                </td>
+                <td class="code">
+                    <div class="highlight">
+                        <pre class="hljs php"><span class="hljs-meta">&lt;?php</span>
+
+<span class="hljs-keyword">declare</span>(strict_types=<span class="hljs-number">1</span>);
+
+<span class="hljs-comment">// pre-release.php  (in the _hubkit branch)</span>
+
+<span class="hljs-keyword">use</span> <span class="hljs-title">Psr</span>\<span class="hljs-title">Container</span>\<span class="hljs-title">ContainerInterface</span> <span class="hljs-title">as</span> <span class="hljs-title">Container</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">Rollerworks</span>\<span class="hljs-title">Component</span>\<span class="hljs-title">Version</span>\<span class="hljs-title">Version</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">Symfony</span>\<span class="hljs-title">Component</span>\<span class="hljs-title">Console</span>\<span class="hljs-title">Helper</span>\<span class="hljs-title">ProgressIndicator</span>;
+
+<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(Container <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>container</span>, Version <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>version</span>, string <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>branch</span>, ?string <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>releaseTitle</span>, string <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>changelog</span>)</span> </span>{
+
+    <span class="hljs-comment">/** <span class="hljs-doctag">@var</span> \Psr\Log\LoggerInterface $logger */</span>
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>logger</span> = <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>container</span><span class="hljs-operator">-&gt;</span>get(<span class="hljs-string">'logger'</span>);
+    <span class="hljs-comment">/** <span class="hljs-doctag">@var</span> \HubKit\Service\GitHub $github */</span>
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>github</span> = <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>container</span><span class="hljs-operator">-&gt;</span>get(<span class="hljs-string">'github'</span>);
+    <span class="hljs-comment">/** <span class="hljs-doctag">@var</span> \HubKit\Service\Git\GitBranch $gitBranch */</span>
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>gitBranch</span> = <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>container</span><span class="hljs-operator">-&gt;</span>get(<span class="hljs-string">'git.branch'</span>);
+
+    <span class="hljs-comment">/** <span class="hljs-doctag">@var</span> \Symfony\Component\Console\Style\SymfonyStyle $style */</span>
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>style</span> = <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>container</span><span class="hljs-operator">-&gt;</span>get(<span class="hljs-string">'style'</span>);
+
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>logger</span><span class="hljs-operator">-&gt;</span>info(<span class="hljs-string">'Preparing new release branch'</span>);
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>gitBranch</span><span class="hljs-operator">-&gt;</span>checkoutNew(<span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>releaseBranch</span> = <span class="hljs-string">'release-'</span>.<span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>version</span><span class="hljs-operator">-&gt;</span>full);
+
+        <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>logger</span><span class="hljs-operator">-&gt;</span>info(<span class="hljs-string">'Updating composer branch-alias'</span>);
+        <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>container</span><span class="hljs-operator">-&gt;</span>get(<span class="hljs-string">'process'</span>)<span class="hljs-operator">-&gt;</span>mustRun([<span class="hljs-string">'composer'</span>, <span class="hljs-string">'config'</span>, <span class="hljs-string">'extra.branch-alias.dev-'</span>.<span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>branch</span>, sprintf(<span class="hljs-string">'%d.%d-dev'</span>, <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>version</span><span class="hljs-operator">-&gt;</span>major, <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>version</span><span class="hljs-operator">-&gt;</span>minor)]);
+
+        <span class="hljs-comment">// WARNING if nothing was changed this will crash the entire process, make sure to use something like:</span>
+        <span class="hljs-comment">//</span>
+        <span class="hljs-comment">// if ($gitBranch-&gt;isWorkingTreeReady()) {</span>
+        <span class="hljs-comment">//     return;</span>
+        <span class="hljs-comment">// }</span>
+
+        <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>gitBranch</span><span class="hljs-operator">-&gt;</span>add(<span class="hljs-string">'composer.json'</span>);
+        <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>gitBranch</span><span class="hljs-operator">-&gt;</span>commit(<span class="hljs-string">'Update composer branch-alias'</span>);
+
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>gitBranch</span><span class="hljs-operator">-&gt;</span>pushToRemote(<span class="hljs-string">'origin'</span>, <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>releaseBranch</span>);
+
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>pr</span> = <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>github</span><span class="hljs-operator">-&gt;</span>openPullRequest(<span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>branch</span>, <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>releaseBranch</span>, <span class="hljs-string">'Release v'</span>.<span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>version</span><span class="hljs-operator">-&gt;</span>full, <span class="hljs-string">'This might be a good place for a changelog.'</span>);
+
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>style</span><span class="hljs-operator">-&gt;</span>warning([
+        <span class="hljs-string">'Pull request '</span>.<span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>pr</span>[<span class="hljs-string">'html_url'</span>].<span class="hljs-string">' was opened for this release.'</span>,
+        <span class="hljs-string">'The process will automatically continue once this pull request is merged.'</span>,
+        <span class="hljs-string">'!! DO NOT ABORT THE COMMAND !!'</span>
+    ]);
+
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>progress</span> = <span class="hljs-keyword">new</span> ProgressIndicator(<span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>style</span>);
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>progress</span><span class="hljs-operator">-&gt;</span>start(<span class="hljs-string">'Waiting for pull request to be merged.'</span>);
+
+    <span class="hljs-comment">// Wait till the pull-request is merged. This might crash if the API limit is exceeded.</span>
+    <span class="hljs-comment">//</span>
+    <span class="hljs-comment">// Alternatively you can merge the pull request directly, but make sure you use a proper CI.</span>
+    <span class="hljs-keyword">while</span> (<span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>github</span><span class="hljs-operator">-&gt;</span>getPullRequest(<span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>pr</span>[<span class="hljs-string">'number'</span>])[<span class="hljs-string">'state'</span>] === <span class="hljs-string">'open'</span>) {
+        sleep(<span class="hljs-number">30</span>); <span class="hljs-comment">// sleep for 30 seconds</span>
+
+        <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>progress</span><span class="hljs-operator">-&gt;</span>advance();
+    }
+
+    <span class="hljs-keyword">if</span> (<span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>github</span><span class="hljs-operator">-&gt;</span>getPullRequest(<span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>pr</span>[<span class="hljs-string">'number'</span>])[<span class="hljs-string">'merged'</span>] === <span class="hljs-keyword">false</span>) {
+        <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>progress</span><span class="hljs-operator">-&gt;</span>finish(<span class="hljs-string">'Pull request was closed. Aborting.'</span>);
+
+        <span class="hljs-keyword">exit</span>(<span class="hljs-number">1</span>);
+    }
+
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>progress</span><span class="hljs-operator">-&gt;</span>finish(<span class="hljs-string">'Pull request was merged, continuing.'</span>);
+    <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>gitBranch</span><span class="hljs-operator">-&gt;</span>pullRemote(<span class="hljs-string">'upstream'</span>, <span class="hljs-variable"><span class="hljs-variable-other-marker">$</span>branch</span>);
+};</pre>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</div>
+</div>
+<div class="section">
+<h2 id="final-words">
+    Final Words
+    <a class="headerlink" href="#final-words" title="Permalink to this headline">¶</a>
+</h2>
+<p>The <code translate="no" class="notranslate">post-release</code> script might be used to automatically publish a blog post,
+or reset the version information in a PHP file to prepare for the next release.</p>
+<p>For more advanced usage in either, the pre or post phase you might want to use something
+like <a href="https://github.com/liip/RMT#actions" class="reference external" rel="external noopener noreferrer" target="_blank">https://github.com/liip/RMT#actions</a> (be sure to set `vcs` to none to prevent conflicts).</p>
+</div>
+</div>
+
+                            </div>                    </div>
+                                    </div>        </div>
+
+    </section>
+
+</div>
+
+
+<script type="text/javascript" src="assets/js/theme.js"></script>
+<script type="text/javascript" src="assets/js/badge_only.js"></script>
+
+ 
+</body>
+</html>

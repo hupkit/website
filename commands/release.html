@@ -1,0 +1,151 @@
+        
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+<head><base href="/">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            
+                                
+    
+    <link rel="stylesheet" href="assets/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="assets/css/highlightjs.css" type="text/css" />
+    <link rel="stylesheet" href="assets/css/badge_only.css" type="text/css" />
+
+</head>
+
+<body class="wy-body-for-nav">
+ <div class="wy-grid-for-nav">
+
+        <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
+                
+                                                                                                    
+                                                                                                                                                                        </div>
+
+            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                                                                                                                                                                                                                                                                                                                            </div>
+        </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+                                                        
+
+        <div class="wy-nav-content">                <div class="rst-content">
+                                        <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">                            <div itemprop="articleBody">
+                                    <div class="section">
+<h1 id="release">
+    release
+    <a class="headerlink" href="#release" title="Permalink to this headline">¶</a>
+</h1>
+<p>Creates a new release for the current branch. This creates a (signed) Git tag and GitHub release-page.</p>
+<p>The <code translate="no" class="notranslate">release</code> command automatically generates a changelog and allows to add additional
+info using your favorite editor. Use the <code translate="no" class="notranslate">--no-edit</code> option to skip the editing.</p>
+<div class="admonition admonition-tip ">
+    <p class="admonition-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+                <span>Tip</span>
+    </p><p>You can change the content later using the GitHub web interface.</p>
+</div>
+<div translate="no" class="highlight-bash notranslate">
+    <table class="highlighttable">
+        <tbody>
+            <tr>
+                <td class="linenos">
+                    <div class="linenodiv">
+                        <pre>1</pre>
+                    </div>
+                </td>
+                <td class="code">
+                    <div class="highlight">
+                        <pre class="hljs bash">$ hupkit release 1.0.0</pre>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="section">
+<h2 id="validation">
+    Validation
+    <a class="headerlink" href="#validation" title="Permalink to this headline">¶</a>
+</h2>
+<p>A version is expected to follow the SemVer format, either <code translate="no" class="notranslate">v1.0.0</code>, <code translate="no" class="notranslate">0.1.0</code> or <code translate="no" class="notranslate">v1.0.0-BETA1</code>.</p>
+<p>The leading <code translate="no" class="notranslate">v</code> is automatically added when missing, and the meta version (alpha, beta, rc) is
+changed to uppercase. And versions are validated against gaps to prevent mistakes.</p>
+<div class="admonition admonition-tip ">
+    <p class="admonition-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+                <span>Tip</span>
+    </p><p>The version is automatically expended, meaning <code translate="no" class="notranslate">1.0</code> is expended to <code translate="no" class="notranslate">1.0.0</code>.</p>
+</div>
+</div>
+<div class="section">
+<h2 id="special-options">
+    Special Options
+    <a class="headerlink" href="#special-options" title="Permalink to this headline">¶</a>
+</h2>
+<p>The <code translate="no" class="notranslate">release</code> command has a number of special options:</p>
+<ul>
+    <li><code translate="no" class="notranslate">--all-categories</code>: Show all categories (including empty) in the changelog;</li>
+<li><code translate="no" class="notranslate">--no-edit</code>: Don't open the editor for editing the release page, accept the changelog as-is;</li>
+<li><code translate="no" class="notranslate">--pre-release</code>: Mark the release as a pre-release (not production ready);</li>
+<li><code translate="no" class="notranslate">--title=&#039;A Bright New Year&#039;</code>: Append a custom title to release name (after the version number);</li>
+</ul>
+<div class="admonition admonition-note ">
+    <p class="admonition-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                <span>Note</span>
+    </p><p>A make sure that when the title contains special characters these are escaped
+accordingly. Or use single quotes (as shown) to prevent shell script expansion.</p>
+<p><a href="https://stackoverflow.com/questions/15783701/which-characters-need-to-be-escaped-when-using-bash" class="reference external" rel="external noopener noreferrer" target="_blank">https://stackoverflow.com/questions/15783701/which-characters-need-to-be-escaped-when-using-bash</a></p>
+</div>
+</div>
+<div class="section">
+<h2 id="release-hooks">
+    Release Hooks
+    <a class="headerlink" href="#release-hooks" title="Permalink to this headline">¶</a>
+</h2>
+<p>The <code translate="no" class="notranslate">release</code> command allows to executes a script prior (pre) and/or after (post) after the release
+operation. See <a href="../release-hooks.html" class="reference internal">Release Hooks</a> for details.</p>
+</div>
+<div class="section">
+<h2 id="notes-on-git-tag-signing">
+    Notes on Git tag Signing
+    <a class="headerlink" href="#notes-on-git-tag-signing" title="Permalink to this headline">¶</a>
+</h2>
+<p>By default a Git tag of each release is cryptographically signed, using the <code translate="no" class="notranslate">release.signed</code>
+repository configuration this can be disabled (for all releases) or set to automatic.</p>
+<div class="admonition admonition-caution ">
+    <p class="admonition-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <span>Caution</span>
+    </p><p>Signing a Git tag ensures a release can always be verried to come from a
+trusted source. And is considered a best practice for secure distribution
+pipeline.</p>
+</div>
+<p>Make sure you have a signing key configured, and that your gpg/pgp application is
+set-up properly.</p>
+<p>Run <code translate="no" class="notranslate">self-diagnose</code> command to test if this set-up correctly for you.</p>
+<p>See also: <a href="https://git-scm.com/book/tr/v2/Git-Tools-Signing-Your-Work" class="reference external" rel="external noopener noreferrer" target="_blank">https://git-scm.com/book/tr/v2/Git-Tools-Signing-Your-Work</a></p>
+</div>
+</div>
+
+                            </div>                    </div>
+                                    </div>        </div>
+
+    </section>
+
+</div>
+
+
+<script type="text/javascript" src="assets/js/theme.js"></script>
+<script type="text/javascript" src="assets/js/badge_only.js"></script>
+
+ 
+</body>
+</html>

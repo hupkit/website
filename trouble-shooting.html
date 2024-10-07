@@ -1,0 +1,83 @@
+        
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+<head><base href="/">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            
+                                
+    
+    <link rel="stylesheet" href="assets/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="assets/css/highlightjs.css" type="text/css" />
+    <link rel="stylesheet" href="assets/css/badge_only.css" type="text/css" />
+
+</head>
+
+<body class="wy-body-for-nav">
+ <div class="wy-grid-for-nav">
+
+        <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
+                
+                                                                                                    
+                                                                                                                                                                        </div>
+
+            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                                                                                                                                                                                                                                                                                                                            </div>
+        </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+                                                        
+
+        <div class="wy-nav-content">                <div class="rst-content">
+                                        <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">                            <div itemprop="articleBody">
+                                    <div class="section">
+<h1 id="trouble-shooting">
+    Trouble Shooting
+    <a class="headerlink" href="#trouble-shooting" title="Permalink to this headline">¶</a>
+</h1>
+<p>When HuPKit isn't working as expected.</p>
+<p>First make sure you are using the latest stable release, older versions
+are not covered by the backward compatibility policy.</p>
+<p>When you experience trouble with repository splitting, run the <code translate="no" class="notranslate">clear-cache</code>
+command to remove any corrupted repositories.</p>
+<div class="section">
+<h2 id="self-diagnose">
+    Self Diagnose
+    <a class="headerlink" href="#self-diagnose" title="Permalink to this headline">¶</a>
+</h2>
+<p>Run the <code translate="no" class="notranslate">self-diagnose</code> command to get some information on misconfigurations,
+or non locatable executables.</p>
+</div>
+<div class="section">
+<h2 id="local-configuration">
+    Local Configuration
+    <a class="headerlink" href="#local-configuration" title="Permalink to this headline">¶</a>
+</h2>
+<p>When you run into a local configuration error, and are not currently in
+the &quot;_hubkit&quot; configuration branch, run HuPKit with the env <code translate="no" class="notranslate">HUBKIT_NO_LOCAL=true</code>
+like <code translate="no" class="notranslate">HUBKIT_NO_LOCAL=true hupkit edit-config</code>.</p>
+<p>And clear the cache using the <code translate="no" class="notranslate">clear-cache</code> command afterwards.</p>
+</div>
+</div>
+
+                            </div>                    </div>
+                                    </div>        </div>
+
+    </section>
+
+</div>
+
+
+<script type="text/javascript" src="assets/js/theme.js"></script>
+<script type="text/javascript" src="assets/js/badge_only.js"></script>
+
+ 
+</body>
+</html>

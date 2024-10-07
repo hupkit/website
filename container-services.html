@@ -1,0 +1,150 @@
+        
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+<head><base href="/">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            
+                                
+    
+    <link rel="stylesheet" href="assets/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="assets/css/highlightjs.css" type="text/css" />
+    <link rel="stylesheet" href="assets/css/badge_only.css" type="text/css" />
+
+</head>
+
+<body class="wy-body-for-nav">
+ <div class="wy-grid-for-nav">
+
+        <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
+                
+                                                                                                    
+                                                                                                                                                                        </div>
+
+            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                                                                                                                                                                                                                                                                                                                            </div>
+        </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+                                                        
+
+        <div class="wy-nav-content">                <div class="rst-content">
+                                        <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">                            <div itemprop="articleBody">
+                                    <div class="section">
+<h1 id="container-services">
+    Container Services
+    <a class="headerlink" href="#container-services" title="Permalink to this headline">¶</a>
+</h1>
+<p>Hook scripts have access to the application workflow, and can use a
+number of services for special operations like Git, or asking questions.</p>
+<div class="admonition admonition-note ">
+    <p class="admonition-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                <span>Note</span>
+    </p><p>The <code translate="no" class="notranslate">github</code> service is automatically configured, don't call <code translate="no" class="notranslate">autoConfigure()</code>
+as this will break the application.</p>
+<p>Call <code translate="no" class="notranslate">createForHost()</code> instead, if you must access another GitHub account.</p>
+</div>
+<p>The following services can be safely used, and are covered by the BC policy:</p>
+<div class="table-wrapper">
+<table>
+            <thead>
+                            <tr>
+                                            <th>Service-id</th>
+                                            <th>Class</th>
+                                            <th>Description</th>
+                                    </tr>
+                    </thead>
+        <tbody>
+                    <tr>
+                                    <td><code translate="no" class="notranslate">config</code></td>
+                                    <td><code translate="no" class="notranslate">HubKit\Config</code></td>
+                                    <td>Configuration</td>
+                            </tr>
+                    <tr>
+                                    <td><code translate="no" class="notranslate">guzzle</code></td>
+                                    <td><code translate="no" class="notranslate">GuzzleHttp\Client</code></td>
+                                    <td>Guzzle Http client</td>
+                            </tr>
+                    <tr>
+                                    <td><code translate="no" class="notranslate">style</code></td>
+                                    <td><code translate="no" class="notranslate">Symfony<wbr>\Component<wbr>\Console<wbr>\Style<wbr>\SymfonyStyle</code></td>
+                                    <td>Symfony Style for mes sages, questions, etc.</td>
+                            </tr>
+                    <tr>
+                                    <td><code translate="no" class="notranslate">process</code></td>
+                                    <td><code translate="no" class="notranslate">HubKit\Service\CliProcess</code></td>
+                                    <td>Run a shell command</td>
+                            </tr>
+                    <tr>
+                                    <td><code translate="no" class="notranslate">git</code></td>
+                                    <td><code translate="no" class="notranslate">HubKit\Service\Git</code></td>
+                                    <td>Git base service</td>
+                            </tr>
+                    <tr>
+                                    <td><code translate="no" class="notranslate">git.branch</code></td>
+                                    <td><code translate="no" class="notranslate">HubKit\Service\Git\GitBranch</code></td>
+                                    <td>Git branch related operations</td>
+                            </tr>
+                    <tr>
+                                    <td><code translate="no" class="notranslate">git.config</code></td>
+                                    <td><code translate="no" class="notranslate">HubKit\Service\Git\GitConfig</code></td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                    <tr>
+                                    <td><code translate="no" class="notranslate">git.temp_repository</code></td>
+                                    <td><code translate="no" class="notranslate">HubKit\Service\Git\GitTempRepository</code></td>
+                                    <td>Create a temporary Git repository for working, used by the <code translate="no" class="notranslate">git.file_reader</code></td>
+                            </tr>
+                    <tr>
+                                    <td><code translate="no" class="notranslate">git.file_reader</code></td>
+                                    <td><code translate="no" class="notranslate">HubKit\Service\Git\GitFileReader</code></td>
+                                    <td>File reader for Git, allows to get a file without the need for a local checkout (using a temporary repository</td>
+                            </tr>
+                    <tr>
+                                    <td><code translate="no" class="notranslate">branch_splitsh_git</code></td>
+                                    <td><code translate="no" class="notranslate">HubKit\Service\BranchSplitsh</code></td>
+                                    <td>Branch splitting service, according to configuration. Requires a clean working dir</td>
+                            </tr>
+                    <tr>
+                                    <td><code translate="no" class="notranslate">filesystem</code></td>
+                                    <td><code translate="no" class="notranslate">HubKit\Service\Filesystem</code></td>
+                                    <td>Filesystem service for writing/reading local files</td>
+                            </tr>
+                    <tr>
+                                    <td><code translate="no" class="notranslate">editor</code></td>
+                                    <td><code translate="no" class="notranslate">HubKit\Service\Editor</code></td>
+                                    <td>Allows to open the default editor for either a changelog or file editing. Keeps the process waiting till closed</td>
+                            </tr>
+                    <tr>
+                                    <td><code translate="no" class="notranslate">github</code></td>
+                                    <td><code translate="no" class="notranslate">HubKit\Service\GitHub</code></td>
+                                    <td>GitHub API adapter</td>
+                            </tr>
+            </tbody>
+</table>
+</div>
+<p>See the source code for method usage and instructions.</p>
+</div>
+
+                            </div>                    </div>
+                                    </div>        </div>
+
+    </section>
+
+</div>
+
+
+<script type="text/javascript" src="assets/js/theme.js"></script>
+<script type="text/javascript" src="assets/js/badge_only.js"></script>
+
+ 
+</body>
+</html>
